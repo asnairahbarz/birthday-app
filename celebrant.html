@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Birthday Messages for Dr. Nelia</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to right, #fce4ec, #f3e5f5);
+      text-align: center;
+      padding: 30px;
+    }
+
+    h1 {
+      color: #ad1457;
+    }
+
+    img {
+      width: 220px;
+      height: 220px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 6px solid #ec407a;
+      margin-bottom: 20px;
+    }
+
+    audio {
+      display: none;
+    }
+
+    .message-board {
+      max-width: 700px;
+      margin: auto;
+      margin-top: 30px;
+      text-align: left;
+    }
+
+    .user-message {
+      background-color: #f8bbd0;
+      border-left: 6px solid #ec407a;
+      padding: 12px;
+      border-radius: 10px;
+      margin-bottom: 12px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    .back-link {
+      display: inline-block;
+      margin-top: 30px;
+      text-decoration: none;
+      color: #6a1b9a;
+    }
+  </style>
+</head>
+<body onload="document.getElementById('music').play()">
+
+  <img src="celebrant.jpg" alt="Dr. Nelia S. Raganas" />
+  <h1>Birthday Greetings for Dr. Nelia</h1>
+
+  <audio id="music" autoplay loop>
+    <source src="birthday.mp3" type="audio/mp3" />
+  </audio>
+
+  <div class="message-board" id="messageBoard"></div>
+
+  <script>
+    function loadMessages() {
+      fetch('/messages')
+        .then(res => res.json())
+        .then(data => {
+          const board = document.getElementById('messageBoard');
+          data.forEach(message => {
+            const div = document.createElement('div');
+            div.className = 'user-message';
+            div.textContent = message;
+            board.appendChild(div);
+          });
+        });
+    }
+
+    loadMessages();
+  </script>
+
+</body>
+</html>
