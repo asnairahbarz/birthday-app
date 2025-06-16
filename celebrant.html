@@ -29,57 +29,92 @@
       display: none;
     }
 
-    .message-board {
+    .message-display {
       max-width: 700px;
-      margin: auto;
-      margin-top: 30px;
-      text-align: left;
-    }
-
-    .user-message {
-      background-color: #f8bbd0;
+      margin: 30px auto;
+      padding: 20px;
+      font-size: 1.2rem;
       border-left: 6px solid #ec407a;
-      padding: 12px;
+      background-color: #f8bbd0;
       border-radius: 10px;
-      margin-bottom: 12px;
       box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      display: none;
     }
 
-    .back-link {
-      display: inline-block;
-      margin-top: 30px;
-      text-decoration: none;
+    .start-button {
+      background-color: #ab47bc;
+      color: white;
+      padding: 12px 24px;
+      font-size: 1rem;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    .pause-tip {
+      margin-top: 15px;
+      font-size: 0.9rem;
       color: #6a1b9a;
     }
   </style>
 </head>
 <body onload="document.getElementById('music').play()">
 
-  <img src="celebrant.jpg" alt="Dr. Nelia S. Raganas" />
-  <h1>Birthday Greetings for Dr. Nelia</h1>
+  <img src="public/celebrant.jpg" alt="Dr. Nelia S. Raganas" />
+  <h1>Happy Birthday Dr. Nelia!</h1>
 
   <audio id="music" autoplay loop>
-    <source src="birthday.mp3" type="audio/mp3" />
+    <source src="public/birthday.mp3" type="audio/mp3" />
   </audio>
 
-  <div class="message-board" id="messageBoard"></div>
+  <button class="start-button" onclick="startDisplay()">See Messages</button>
+  <div class="pause-tip">(Long press or click and hold anywhere to pause.)</div>
+
+  <div class="message-display" id="messageDisplay"></div>
 
   <script>
-    function loadMessages() {
+    let messages = [];
+    let index = 0;
+    let interval;
+    let isPaused = false;
+
+    function startDisplay() {
+      document.querySelector('.start-button').style.display = 'none';
       fetch('/messages')
         .then(res => res.json())
         .then(data => {
-          const board = document.getElementById('messageBoard');
-          data.forEach(message => {
-            const div = document.createElement('div');
-            div.className = 'user-message';
-            div.textContent = message;
-            board.appendChild(div);
-          });
+          messages = data;
+          if (messages.length === 0) {
+            showMessage("No messages yet.");
+            return;
+          }
+          document.getElementById('messageDisplay').style.display = 'block';
+          showMessage(messages[index]);
+          interval = setInterval(nextMessage, 5000);
         });
     }
 
-    loadMessages();
+    function showMessage(msg) {
+      const display = document.getElementById('messageDisplay');
+      display.textContent = msg;
+    }
+
+    function nextMessage() {
+      if (isPaused) return;
+      index++;
+      if (index < messages.length) {
+        showMessage(messages[index]);
+      } else {
+        clearInterval(interval);
+        showMessage("End of messages. Happy Birthday again!");
+      }
+    }
+
+    // Pause on long press / hold anywhere
+    document.body.addEventListener('mousedown', () => isPaused = true);
+    document.body.addEventListener('mouseup', () => isPaused = false);
+    document.body.addEventListener('touchstart', () => isPaused = true);
+    document.body.addEventListener('touchend', () => isPaused = false);
   </script>
 
 </body>
