@@ -1,7 +1,8 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8">
   <title>Happy Birthday Dr. Nelia</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
@@ -9,69 +10,43 @@
       margin: 0;
       padding: 0;
       font-family: 'Segoe UI', sans-serif;
-      background: #f8fff8 url(floral-bg.jpg') no-repeat center center fixed;
+      background: #f8fff8 url('public/floral-bg.jpg') no-repeat center center fixed;
       background-size: cover;
       text-align: center;
       color: #106600;
     }
-
-    #countdown {
-      font-size: 4rem;
-      font-weight: bold;
-      margin-top: 20vh;
-      color: #106600;
-      animation: pop 1s ease-in-out;
-    }
-
-    @keyframes pop {
-      0% { transform: scale(0.8); opacity: 0.2; }
-      100% { transform: scale(1); opacity: 1; }
-    }
-
     .card {
       max-width: 500px;
       margin: 40px auto;
-      background: rgba(255, 255, 255, 0.95);
+      background: rgba(255, 255, 255, 0.9);
       border-radius: 16px;
       padding: 20px;
       box-shadow: 0 0 10px rgba(0,0,0,0.1);
-      display: none;
-      animation: fadein 1s ease forwards;
+      position: relative;
     }
-
-    @keyframes fadein {
-      from { opacity: 0; transform: translateY(30px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    .photo-frame {
-      border: 6px solid #106600;
-      border-radius: 12px;
-      overflow: hidden;
-      width: 200px;
-      height: 200px;
-      margin: 0 auto 20px;
-    }
-
-    .photo-frame img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
     h1 {
-      font-size: 2.3rem;
-      margin: 0.4em 0 0.2em;
+      font-size: 2.5rem;
+      margin-bottom: 0.2em;
       color: #106600;
     }
-
     .name {
       font-weight: bold;
       font-size: 1.2rem;
       margin-bottom: 20px;
       letter-spacing: 1px;
     }
-
+    .photo-frame {
+      border: 6px solid #106600;
+      border-radius: 12px;
+      display: inline-block;
+      overflow: hidden;
+      margin: 20px 0;
+    }
+    .photo-frame img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
     .btn {
       background-color: #106600;
       color: white;
@@ -82,7 +57,6 @@
       cursor: pointer;
       margin-top: 15px;
     }
-
     .message-box {
       margin-top: 25px;
       display: none;
@@ -93,53 +67,30 @@
       border-radius: 10px;
       min-height: 80px;
     }
-
     audio {
       display: none;
     }
   </style>
 </head>
-<body>
+<body onload="document.getElementById('music').play()">
 
-  <!-- Countdown -->
-  <div id="countdown">5</div>
-
-  <!-- Birthday Card (Hidden Until Countdown Ends) -->
-  <div class="card" id="card">
-    <div class="photo-frame">
-      <img src="celebrant.jpg" alt="Dr. Nelia">
-    </div>
-
+  <div class="card">
     <h1>🎉 Happy Birthday 🎉</h1>
     <div class="name">Dr. Nelia S. Raganas</div>
+
+    <div class="photo-frame">
+      <img src="public/celebrant.jpg" alt="Dr. Nelia">
+    </div>
 
     <button class="btn" onclick="showMessages()">See Messages</button>
     <div class="message-box" id="messageBox">Loading messages...</div>
   </div>
 
-  <!-- Birthday Music -->
   <audio id="music" autoplay loop>
-    <source src="birthday.mp3" type="audio/mp3">
+    <source src="public/birthday.mp3" type="audio/mp3">
   </audio>
 
   <script>
-    const countdownEl = document.getElementById('countdown');
-    const card = document.getElementById('card');
-    const music = document.getElementById('music');
-    let count = 5;
-
-    const countdownInterval = setInterval(() => {
-      count--;
-      if (count > 0) {
-        countdownEl.textContent = count;
-      } else {
-        clearInterval(countdownInterval);
-        countdownEl.style.display = 'none';
-        card.style.display = 'block';
-        music.play();
-      }
-    }, 1000);
-
     let messages = [];
     let currentIndex = 0;
     let interval;
@@ -164,7 +115,7 @@
               messageBox.innerText = messages[currentIndex];
             } else {
               clearInterval(interval);
-              messageBox.innerText = "🎊 That's all the messages. Have a wonderful birthday!";
+              messageBox.innerText = "🎉 That's all the messages. Have a wonderful birthday! 🎉";
             }
           }, 3000);
         });
