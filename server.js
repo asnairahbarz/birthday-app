@@ -1,35 +1,25 @@
 const express = require('express');
-const fs = require('fs');
 const path = require('path');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-const messagesFile = path.join(__dirname, 'messages.json');
+// ✅ Serve static files from the public directory
+app.use(express.static(path.join(__dirname, 'public')));
 
-app.use(express.json());
-app.use(express.static('public'));
+// ✅ Serve HTML files directly (like celebrant.html)
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'celebrant.html'));
+});
 
-app.get('/', (req, res) => res.redirect('/greet.html'));
-app.get('/greet.html', (req, res) => res.sendFile(path.join(__dirname, 'greet.html')));
-app.get('/celebrant.html', (req, res) => res.sendFile(path.join(__dirname, 'celebrant.html')));
-
-// API to get and post messages
+// ✅ Serve messages if needed
 app.get('/messages', (req, res) => {
-  fs.readFile(messagesFile, 'utf-8', (err, data) => {
-    res.json(err ? [] : JSON.parse(data || '[]'));
-  });
+  res.json([
+    "Wishing you all the best!",
+    "Happy Birthday, Dr. Nelia!",
+    "May your day be filled with joy 🎂"
+  ]);
 });
 
-app.post('/messages', (req, res) => {
-  const newMessage = req.body.message;
-  fs.readFile(messagesFile, 'utf-8', (err, data) => {
-    const messages = !err && data ? JSON.parse(data) : [];
-    messages.push(newMessage);
-    fs.writeFile(messagesFile, JSON.stringify(messages, null, 2), err => {
-      if (err) return res.status(500).send("Error saving");
-      res.json({ message: newMessage });
-    });
-  });
+app.listen(PORT, () => {
+  console.log(`Server running on http://localhost:${PORT}`);
 });
-
-app.listen(PORT, () => console.log(`?? Birthday App running at http://localhost:${PORT}`));
