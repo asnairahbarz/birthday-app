@@ -7,84 +7,98 @@
   <style>
     body {
       font-family: 'Segoe UI', sans-serif;
-      background: linear-gradient(to right, #e8f5e9, #f1f8e9);
+      background: linear-gradient(to right, #f0fff0, #e8f5e9);
       text-align: center;
-      padding: 30px;
+      padding: 20px;
       color: #106600;
+    }
+
+    .name-banner {
+      background-color: #106600;
+      color: white;
+      padding: 10px 20px;
+      display: inline-block;
+      font-size: 1.5rem;
+      border-radius: 20px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.2);
+      margin-bottom: 30px;
     }
 
     h1 {
+      font-size: 2.4rem;
+      margin: 0.5em 0;
       color: #106600;
-      font-size: 2.2rem;
-    }
-
-    img.profile {
-      width: 220px;
-      height: 220px;
-      border-radius: 50%;
-      object-fit: cover;
-      border: 6px solid #106600;
-      margin-bottom: 20px;
-      box-shadow: 0 0 15px rgba(16, 102, 0, 0.3);
     }
 
     .gif {
-      width: 80px;
-      height: 80px;
-      margin-bottom: 15px;
+      width: 120px;
+      height: auto;
+      margin-top: 15px;
     }
 
-    audio {
-      display: none;
-    }
-
-    .message-display {
-      max-width: 700px;
-      margin: 30px auto;
-      padding: 20px;
-      font-size: 1.2rem;
-      border-left: 6px solid #106600;
-      background-color: #f0fdf4;
-      border-radius: 10px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-      display: none;
-      min-height: 80px;
+    img.profile {
+      width: 230px;
+      height: 230px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 8px solid #106600;
+      margin-bottom: 20px;
+      box-shadow: 0 0 25px rgba(16, 102, 0, 0.3);
     }
 
     .start-button {
       background-color: #106600;
       color: white;
-      padding: 12px 24px;
+      padding: 12px 30px;
       font-size: 1rem;
       border: none;
-      border-radius: 8px;
+      border-radius: 10px;
+      margin-top: 20px;
       cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .start-button:hover {
+      background-color: #0c5500;
     }
 
     .pause-tip {
-      margin-top: 15px;
+      margin-top: 10px;
       font-size: 0.9rem;
       color: #2e7d32;
     }
 
-    .emoji {
-      font-size: 2rem;
-      margin: 0 5px;
+    .message-display {
+      max-width: 700px;
+      margin: 30px auto;
+      padding: 25px;
+      font-size: 1.2rem;
+      border-left: 6px solid #106600;
+      background-color: #f0fdf4;
+      border-radius: 12px;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+      display: none;
+      min-height: 80px;
+    }
+
+    audio {
+      display: none;
     }
   </style>
 </head>
 <body onload="document.getElementById('music').play()">
 
-  <!-- Celebrant Picture -->
-  <img src="public/celebrant.jpg" class="profile" alt="Dr. Nelia S. Raganas" />
+  <!-- Celebrant Name -->
+  <div class="name-banner">🎓 Dr. Nelia S. Raganas 🎓</div>
 
-  <!-- Title with Emoji -->
-  <h1>
-    🎉 Happy Birthday Dr. Nelia! 🎉
-  </h1>
+  <!-- Celebrant Image -->
+  <div>
+    <img src="public/celebrant.jpg" class="profile" alt="Dr. Nelia" />
+  </div>
 
-  <!-- Party Popper GIF -->
-  <img src="https://media.giphy.com/media/3o6Zt481isNVuQI1l6/giphy.gif" class="gif" alt="Party Popper GIF" />
+  <!-- Heading and GIF -->
+  <h1>🎉 Happy Birthday Dr. Nelia! 🎉</h1>
+  <img src="https://media.giphy.com/media/3o7qE1YN7aBOFPRw8E/giphy.gif" class="gif" alt="Party GIF" />
 
   <!-- Background Music -->
   <audio id="music" autoplay loop>
@@ -93,11 +107,12 @@
 
   <!-- Show Messages Button -->
   <button class="start-button" onclick="startDisplay()">See Messages</button>
-  <div class="pause-tip">(Long press or tap-and-hold to pause messages)</div>
+  <div class="pause-tip">(Long press or tap-and-hold anywhere to pause messages)</div>
 
-  <!-- Messages Box -->
+  <!-- Message Display Box -->
   <div class="message-display" id="messageDisplay"></div>
 
+  <!-- Script to Handle Message Logic -->
   <script>
     let messages = [];
     let index = 0;
@@ -111,7 +126,7 @@
         .then(data => {
           messages = data;
           if (messages.length === 0) {
-            showMessage("No messages yet.");
+            showMessage("📝 No messages yet, but we all wish you the best!");
             return;
           }
           document.getElementById('messageDisplay').style.display = 'block';
@@ -122,7 +137,7 @@
 
     function showMessage(msg) {
       const display = document.getElementById('messageDisplay');
-      display.innerHTML = `💚 ${msg}`;
+      display.innerHTML = `💌 ${msg}`;
     }
 
     function nextMessage() {
@@ -132,11 +147,10 @@
         showMessage(messages[index]);
       } else {
         clearInterval(interval);
-        showMessage("🎊 That's all the messages! Have a blessed year ahead!");
+        showMessage("🎊 That's all the messages! Happy Birthday again, Dr. Nelia! 💚");
       }
     }
 
-    // Long press to pause message slideshow
     document.body.addEventListener('mousedown', () => isPaused = true);
     document.body.addEventListener('mouseup', () => isPaused = false);
     document.body.addEventListener('touchstart', () => isPaused = true);
