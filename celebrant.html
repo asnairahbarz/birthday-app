@@ -40,4 +40,108 @@
 
     .message-display {
       max-width: 700px;
-      margin: 3
+      margin: 30px auto;
+      padding: 20px;
+      font-size: 1.2rem;
+      border-left: 6px solid #106600;
+      background-color: #f0fdf4;
+      border-radius: 10px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      display: none;
+      min-height: 80px;
+    }
+
+    .start-button {
+      background-color: #106600;
+      color: white;
+      padding: 12px 24px;
+      font-size: 1rem;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    .pause-tip {
+      margin-top: 15px;
+      font-size: 0.9rem;
+      color: #2e7d32;
+    }
+
+    .emoji {
+      font-size: 2rem;
+      margin: 0 5px;
+    }
+  </style>
+</head>
+<body onload="document.getElementById('music').play()">
+
+  <!-- Celebrant Picture -->
+  <img src="public/celebrant.jpg" class="profile" alt="Dr. Nelia S. Raganas" />
+
+  <!-- Title with Emoji -->
+  <h1>
+    🎉 Happy Birthday Dr. Nelia! 🎉
+  </h1>
+
+  <!-- Party Popper GIF -->
+  <img src="https://media.giphy.com/media/3o6Zt481isNVuQI1l6/giphy.gif" class="gif" alt="Party Popper GIF" />
+
+  <!-- Background Music -->
+  <audio id="music" autoplay loop>
+    <source src="public/birthday.mp3" type="audio/mp3" />
+  </audio>
+
+  <!-- Show Messages Button -->
+  <button class="start-button" onclick="startDisplay()">See Messages</button>
+  <div class="pause-tip">(Long press or tap-and-hold to pause messages)</div>
+
+  <!-- Messages Box -->
+  <div class="message-display" id="messageDisplay"></div>
+
+  <script>
+    let messages = [];
+    let index = 0;
+    let interval;
+    let isPaused = false;
+
+    function startDisplay() {
+      document.querySelector('.start-button').style.display = 'none';
+      fetch('/messages')
+        .then(res => res.json())
+        .then(data => {
+          messages = data;
+          if (messages.length === 0) {
+            showMessage("No messages yet.");
+            return;
+          }
+          document.getElementById('messageDisplay').style.display = 'block';
+          showMessage(messages[index]);
+          interval = setInterval(nextMessage, 5000);
+        });
+    }
+
+    function showMessage(msg) {
+      const display = document.getElementById('messageDisplay');
+      display.innerHTML = `💚 ${msg}`;
+    }
+
+    function nextMessage() {
+      if (isPaused) return;
+      index++;
+      if (index < messages.length) {
+        showMessage(messages[index]);
+      } else {
+        clearInterval(interval);
+        showMessage("🎊 That's all the messages! Have a blessed year ahead!");
+      }
+    }
+
+    // Long press to pause message slideshow
+    document.body.addEventListener('mousedown', () => isPaused = true);
+    document.body.addEventListener('mouseup', () => isPaused = false);
+    document.body.addEventListener('touchstart', () => isPaused = true);
+    document.body.addEventListener('touchend', () => isPaused = false);
+  </script>
+
+</body>
+</html>
