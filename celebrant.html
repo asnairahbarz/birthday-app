@@ -68,4 +68,107 @@
     .name {
       font-weight: bold;
       font-size: 1.2rem;
-      margin-botto
+      margin-bottom: 20px;
+      letter-spacing: 1px;
+    }
+
+    .btn {
+      background-color: #106600;
+      color: white;
+      padding: 10px 24px;
+      font-size: 1rem;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-top: 15px;
+    }
+
+    .message-box {
+      margin-top: 25px;
+      display: none;
+      font-size: 1.1rem;
+      padding: 15px;
+      background: #ecf9ec;
+      border-left: 5px solid #106600;
+      border-radius: 10px;
+      min-height: 80px;
+    }
+
+    audio {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Countdown -->
+  <div id="countdown">5</div>
+
+  <!-- Birthday Card (Hidden Until Countdown Ends) -->
+  <div class="card" id="card">
+    <div class="photo-frame">
+      <img src="public/celebrant.jpg" alt="Dr. Nelia">
+    </div>
+
+    <h1>🎉 Happy Birthday 🎉</h1>
+    <div class="name">Dr. Nelia S. Raganas</div>
+
+    <button class="btn" onclick="showMessages()">See Messages</button>
+    <div class="message-box" id="messageBox">Loading messages...</div>
+  </div>
+
+  <!-- Birthday Music -->
+  <audio id="music" autoplay loop>
+    <source src="public/birthday.mp3" type="audio/mp3">
+  </audio>
+
+  <script>
+    const countdownEl = document.getElementById('countdown');
+    const card = document.getElementById('card');
+    const music = document.getElementById('music');
+    let count = 5;
+
+    const countdownInterval = setInterval(() => {
+      count--;
+      if (count > 0) {
+        countdownEl.textContent = count;
+      } else {
+        clearInterval(countdownInterval);
+        countdownEl.style.display = 'none';
+        card.style.display = 'block';
+        music.play();
+      }
+    }, 1000);
+
+    let messages = [];
+    let currentIndex = 0;
+    let interval;
+    let messageBox = document.getElementById("messageBox");
+
+    function showMessages() {
+      document.querySelector(".btn").style.display = "none";
+      fetch("/messages")
+        .then(res => res.json())
+        .then(data => {
+          messages = data;
+          if (messages.length === 0) {
+            messageBox.style.display = "block";
+            messageBox.innerText = "No messages yet.";
+            return;
+          }
+          messageBox.style.display = "block";
+          messageBox.innerText = messages[0];
+          interval = setInterval(() => {
+            currentIndex++;
+            if (currentIndex < messages.length) {
+              messageBox.innerText = messages[currentIndex];
+            } else {
+              clearInterval(interval);
+              messageBox.innerText = "🎊 That's all the messages. Have a wonderful birthday!";
+            }
+          }, 3000);
+        });
+    }
+  </script>
+</body>
+</html>
