@@ -118,14 +118,19 @@
   </div>
 
   <!-- Birthday Music -->
-  <audio id="music" autoplay loop>
-    <source src="birthday.mp3" type="audio/mp3">
-  </audio>
+ <audio id="music" loop>
+  <source src="birthday.mp3" type="audio/mp3" />
+</audio>
 
   <script>
     const countdownEl = document.getElementById('countdown');
     const card = document.getElementById('card');
     const music = document.getElementById('music');
+    window.addEventListener("click", function () {
+    music.play().catch((e) => {
+      console.log("Audio blocked until interaction", e);
+    });
+  });
     let count = 5;
 
     const countdownInterval = setInterval(() => {
