@@ -4,7 +4,7 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 // ✅ Serve static files from 'Public' folder
-app.use(express.static(path.join(__dirname, 'Public')));
+app.use(express.static(path.join(__dirname, 'public')));
 
 // ✅ Serve the celebrant.html file
 app.get('/', (req, res) => {
